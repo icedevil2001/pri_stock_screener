@@ -1,0 +1,14 @@
+name: pri_stock_screener
+
+channels:
+  - default
+  - anacode
+
+dependencies:
+  - python>3.6
+  - flask
+  - pandas 
+  - pip
+  - pip:
+    - yahoo_fin 
+    - yfinance
