@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+afdasdf
+{% block content %}
+<h3>The is where content goes</h3>
+
+<div class=page>
+    {% for table in tables %}
+                {{columns[loop.index]}}
+                {{ table|safe }}
+    {% endfor %}
+</div>
+{% endblock %}

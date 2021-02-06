@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<br>
+<!-- <h3>Fundamental anaylsis</h3> -->
+
+<div class="container">
+    <p>
+        Fundamental analysis uses the information of a company such as its balance sheet, income statements, etc. to compute its value.
+    </p>
+    <div class="row">
+        <form class="form-inline">
+            <!-- <div class="form-group mx-sm-5 mb-2"> -->
+
+                
+            <div class="form-group">
+            <!-- <div class="form-row"> -->
+                <div class="col-md-3">
+                    <label for="tinker" class="form-label" placeholder="AAPL,GOOG,MSFT">Tinker:     </label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control mx-sm-3" id="tinker" style='width: 35em' placeholder="AAPL,GOOG,MSFT">
+                </div>
+
+                <div class="col-md-3" style="position: absolute; right: 5em; padding-left: 1px;">
+                    <button type="submit" class="btn btn-primary mb-2" >Submit</button>
+                </div>
+            </div>
+            </div>
+        </form>
+            
+
+        </div>
+    </div>
+</div>
+<br>
+
+<!-- <div class=page>
+    {#% for table in tables %#}
+                {#{columns[loop.index]}#}
+                {#{ table|safe }#}
+    {#% endfor %#}
+</div> -->
+{% endblock %} 

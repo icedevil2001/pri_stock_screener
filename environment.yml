@@ -2,11 +2,12 @@ name: pri_stock_screener
 
 channels:
   - default
-  - anacode
-
+  - anaconda
+  - conda-forge
 dependencies:
   - python>3.6
   - flask
+  - flask-bootstrap
   - pandas 
   - pip
   - pip:
