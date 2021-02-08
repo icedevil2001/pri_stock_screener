@@ -15,8 +15,8 @@ class Company:
 
   def get_statatistics(self):
     url = f"https://finance.yahoo.com/quote/{self.symbol}/key-statistics?p={self.symbol}"
-    dfs = pandas.read_html(url)
-    df = pandas.concat(dfs[1:])
+    dfs = pd.read_html(url)
+    df = pd.concat(dfs[1:])
     df = df.set_index(0)
     selected = {
       'Gross Profit (ttm)': 'GrossProfit',
@@ -52,7 +52,9 @@ class Company:
 
       }
 
-    df =  si.get_stats_valuation(self.symbol).set_index(0)
+    df =  si.get_stats_valuation(self.symbol)
+    print(df)
+    df = df.set_index(df.columns[0])
     new_df = pd.DataFrame(index=selected.keys()).fillna('na')
     for idx in new_df.index:
       try:
@@ -64,8 +66,13 @@ class Company:
     return new_df
 
 
-companies = ['AAPL', "ROK"]
-
-
-df = pd.concat([Company(company).fundamental_indicators for company in companies],axis=1)
-print(df)
+def fundumental_anaysis(tinkers):
+  company_anaylsis =[]
+  for company in tinkers:
+    company_anaylsis.append(Company(company).fundamental_indicators)
+    print(company_anaylsis)
+  return pd.concat(company_anaylsis, axis=1)
+  # return pd.concat(
+  #   [Company(company).fundamental_indicators for company in tinkers],
+  #    axis=1
+  #    )
