@@ -53,7 +53,6 @@ class Company:
       }
 
     df =  si.get_stats_valuation(self.symbol)
-    print(df)
     df = df.set_index(df.columns[0])
     new_df = pd.DataFrame(index=selected.keys()).fillna('na')
     for idx in new_df.index:

@@ -3,7 +3,7 @@ from flask import Flask, json, render_template, url_for, flash, redirect, reques
 from flask_bootstrap import Bootstrap
 import pandas as pd
 from forms.myform import FundumentalForm
-
+from pathlib import Path
 from screener.fundumental import fundumental_anaysis
 
 def create_app():
@@ -39,7 +39,8 @@ def fundumentals():
         tinkers = [x for x in form.tinker.data.split(',') if len(x)>1]
         print(tinkers)
         df = fundumental_anaysis(tinkers)
-        print("*"*50, df)
+        df.to_csv('exported/fundumental.csv')
+        print(Path(__file__))
         return render_template(
             'fundumental.html', 
             title='Fundumental Anaylsis',

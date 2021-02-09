@@ -36,19 +36,19 @@ def calc_relative_strength(df):
   return avg_gain / avg_losses
 
 def get_stock(stock, days=365, drop_columns=['High', 'Low', 'Open','Close']):
-	start_date, end_date =period(days)
-	try: 
-		df = pdr.get_data_yahoo(stock, start=start_date, end=end_date )
-		df = df.drop(drop_columns, axis=1)
-		df = df.rename(columns={'Adj Close': "adj_close"})
-		
-	except:
-		return False
-	if len(df) < 2:
-		print('Less 2')
-		return False
-	return df
-	
+  start_date, end_date =period(days)
+  try: 
+    df = pdr.get_data_yahoo(stock, start=start_date, end=end_date )
+    df = df.drop(drop_columns, axis=1)
+    df = df.rename(columns={'Adj Close': "adj_close"})
+    
+  except:
+    return False
+  if len(df) < 2:
+    print('Less 2')
+    return False
+  return df
+  
 def rs_rating(stock_rs_strange_value, index_rs_strange_value):
   # print(f'Stock RS:{stock_rs_strange_value}, Index RS:{index_rs_strange_value}')
   return 100 * ( stock_rs_strange_value / index_rs_strange_value )
@@ -157,7 +157,7 @@ class Moving_avg:
           self.condition6(),
           self.condition7(),
           self.condition8()]):
-    	return True
+      return True
 
 def filedownload(df):
     csv = df.to_csv(index=False)
@@ -167,83 +167,92 @@ def filedownload(df):
 
 def stock_screener(index_tinker_name='S&P500', min_vol=5e6, min_price=0, days=365, min_rs_rating=70,):
 # help(si)
-	## fix for yahoo_fin
-	start_date, end_date = period(days)
-	yf.pdr_override()
+  ## fix for yahoo_fin
+  start_date, end_date = period(days)
+  yf.pdr_override()
 
-	index_tinker = {
-		'DOW': 'DOW',
-		'NASDAQ': '^IXIC', 
-		"S&P500": '^GSPC'
-	}
+  index_tinker = {
+    'DOW': 'DOW',
+    'NASDAQ': '^IXIC', 
+    "S&P500": '^GSPC'
+  }
 
-	index_list = {
-		'DOW': si.tickers_sp500(),
-		'NASDAQ': si.tickers_nasdaq(),
-		"S&P500": si.tickers_sp500()
-	}
-	st.header(f'Stock Screener {index_tinker_name}')
-	# stocklist = si.tickers_sp500()
-	min_volume = min_vol
-	# index_name = '^GSPC' # SPY or S&P 500
-	stocklist = index_list.get(index_tinker_name)[:]
+  index_list = {
+    'DOW': si.tickers_sp500(),
+    'NASDAQ': si.tickers_nasdaq(),
+    "S&P500": si.tickers_sp500()
+  }
+  st.header(f'Stock Screener {index_tinker_name}')
+  # stocklist = si.tickers_sp500()
+  min_volume = min_vol
+  # index_name = '^GSPC' # SPY or S&P 500
+  stocklist = index_list.get(index_tinker_name)[:]
 
-	index_rs_strange_value = calc_relative_strength(
-								get_stock(
-									index_tinker[index_tinker_name], days
-									)
-								)
+  index_rs_strange_value = calc_relative_strength(
+                get_stock(
+                  index_tinker[index_tinker_name], days
+                  )
+                )
 
-	final = []
-	index = []
+  final = []
+  index = []
 
-	exclude_list = []
-	all_data = []
-	latest_iteration = st.empty()
-	having_break = st.empty()
-	bar = st.progress(0)
-	total = len(stocklist)
+  exclude_list = []
+  all_data = []
+  latest_iteration = st.empty()
+  having_break = st.empty()
+  bar = st.progress(0)
+  total = len(stocklist)
 
-	for num, stock_name in enumerate(stocklist):
-		print(f"checking {num}:{stock_name}")
-		if stock_name in exclude_list:
-			continue
-			FAILED = False
-		df = get_stock(stock_name)
-		# print('**',df)
-		if df is False:
-			print(f'SKIPPED to download {stock_name} {num}')
-			continue
+  for num, stock_name in enumerate(stocklist):
+    print(f"checking {num}:{stock_name}")
+    if stock_name in exclude_list:
+      continue
+      FAILED = False
+    df = get_stock(stock_name)
+    # print('**',df)
+    if df is False:
+      print(f'SKIPPED to download {stock_name} {num}')
+      continue
 
-		stock_meta = Moving_avg(stock_name, df, index_rs_strange_value, min_rs_rating)
-		time.sleep(0.2)
+    stock_meta = Moving_avg(stock_name, df, index_rs_strange_value, min_rs_rating)
+    time.sleep(0.2)
 
-		if stock_meta.all_conditions():
-			print(f'Passed conditions: {stock_name}')
-			final.append(stock_meta.as_dict())
-		else:
-			print(f'Failed conditions: {stock_name}')  
-			# all_data.append(stock_meta.as_dict())
-		
-		latest_iteration.text(f'Stocks Processed: {(num+1)}/{total}')
-		bar.progress((num+1)/total)
-	
+    if stock_meta.all_conditions():
+      print(f'Passed conditions: {stock_name}')
+      final.append(stock_meta.as_dict())
+    else:
+      print(f'Failed conditions: {stock_name}')  
+      # all_data.append(stock_meta.as_dict())
+    
+    latest_iteration.text(f'Stocks Processed: {(num+1)}/{total}')
+    bar.progress((num+1)/total)
+  
 
-		if num == 0:
-			continue
-		if num % 10 == 0:
-			for i in list(range(5))[::-1]:
-				having_break.text(f'waiting for {i}sec')
-				time.sleep(1)
-			# having_break = st.empty()
-		if num % 100 == 0:
-			for i in list(range(3))[::-1]:
-				having_break.text(f'waiting for {i}min')
-				time.sleep(60)
-			# having_break = st.empty()
-			# time.sleep(5*60)
+    if num == 0:
+      continue
+    if num % 10 == 0:
+      for i in list(range(5))[::-1]:
+        having_break.text(f'waiting for {i}sec')
+        time.sleep(1)
+      # having_break = st.empty()
+    if num % 100 == 0:
+      for i in list(range(3))[::-1]:
+        having_break.text(f'waiting for {i}min')
+        time.sleep(60)
+      # having_break = st.empty()
+      # time.sleep(5*60)
 
-	final_df = pd.DataFrame(final)
-        final_df['price_change_highest'] = 100 * ( 1- ( final_df["Curren t Price"]/final_df['52 Week High'] ) )
-	# all_data_df = pd.DataFrame(all_data)
-	return final_df 
+  final_df = pd.DataFrame(final)
+  final_df['price_change_highest'] = 100 * ( 1- ( final_df["Curren t Price"]/final_df['52 Week High'] ) )
+  # all_data_df = pd.DataFrame(all_data)
+  return final_df 
+
+
+# df_download(final_df), unsafe_allow_html=True
+
+def df_download(df, filename='', index=False):
+  csv = df.to_csv(index=index)
+  b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
+  href = f'<a href="data:file/csv;base64,{b64}" download="{filename}">Download CSV File</a>'
+  return href

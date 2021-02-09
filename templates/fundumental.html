@@ -30,6 +30,9 @@
 
 <div class=page>
     {%if tables %}
+    <form method="get" action="./exported/fundumental.csv">
+        <button type="submit">Download!</button>
+     </form>
         {% for table in tables %}
             {{columns[loop.index]}}
                 {{ table|safe }}
