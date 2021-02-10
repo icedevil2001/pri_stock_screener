@@ -4,17 +4,18 @@
 
 import pandas as pd
 import yahoo_fin.stock_info as si
+from util import Company
 
 
-class Company:
-  def __init__(self, symbol):
-    self.symbol = symbol
+class CompanyFundumental(Company):
+  def __init__(self, tinker):
+    super().__init__(self, tinker)
     self.fundamental_indicators = pd.concat([self.get_statatistics(),
                                              self.get_valuation_stats()
                                              ])
 
   def get_statatistics(self):
-    url = f"https://finance.yahoo.com/quote/{self.symbol}/key-statistics?p={self.symbol}"
+    url = f"https://finance.yahoo.com/quote/{self.tinker}/key-statistics?p={self.tinker}"
     dfs = pd.read_html(url)
     df = pd.concat(dfs[1:])
     df = df.set_index(0)
@@ -38,7 +39,7 @@ class Company:
         value = df.loc[idx,df.columns[0]]
       except Exception as e:
         value = 'N/A'
-      new_df.loc[idx, self.symbol] = value
+      new_df.loc[idx, self.tinker] = value
     # print(df.index)
     return new_df
 
@@ -52,7 +53,7 @@ class Company:
 
       }
 
-    df =  si.get_stats_valuation(self.symbol)
+    df =  si.get_stats_valuation(self.tinker)
     df = df.set_index(df.columns[0])
     new_df = pd.DataFrame(index=selected.keys()).fillna('na')
     for idx in new_df.index:
@@ -60,18 +61,15 @@ class Company:
         value = df.loc[idx,df.columns[0]]
       except Exception as e:
         value = 'N/A'
-      new_df.loc[idx, self.symbol] = value
+      new_df.loc[idx, self.tinker] = value
     # print(df.index)
     return new_df
 
 
 def fundumental_anaysis(tinkers):
   company_anaylsis =[]
-  for company in tinkers:
-    company_anaylsis.append(Company(company).fundamental_indicators)
+  for tinker in tinkers:
+    company_anaylsis.append(CompanyFundumental(tinker).fundamental_indicators)
     print(company_anaylsis)
   return pd.concat(company_anaylsis, axis=1)
-  # return pd.concat(
-  #   [Company(company).fundamental_indicators for company in tinkers],
-  #    axis=1
-  #    )
+
