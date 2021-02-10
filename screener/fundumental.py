@@ -4,12 +4,14 @@
 
 import pandas as pd
 import yahoo_fin.stock_info as si
-from util import Company
+# import util
+from .util import Company
 
 
 class CompanyFundumental(Company):
   def __init__(self, tinker):
-    super().__init__(self, tinker)
+    super().__init__(tinker)
+
     self.fundamental_indicators = pd.concat([self.get_statatistics(),
                                              self.get_valuation_stats()
                                              ])
@@ -70,6 +72,6 @@ def fundumental_anaysis(tinkers):
   company_anaylsis =[]
   for tinker in tinkers:
     company_anaylsis.append(CompanyFundumental(tinker).fundamental_indicators)
-    print(company_anaylsis)
+    # print(company_anaylsis)
   return pd.concat(company_anaylsis, axis=1)
 

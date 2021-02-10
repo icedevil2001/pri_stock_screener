@@ -239,9 +239,18 @@ import base64
 ##########################################
 
 
+# def df_download(df, filename, index=False):
+#   path = Path('../exported') / filename 
+#   csv = df.to_csv(path, index=index)
+#   # b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
+#   href = f'href="data:file/csv;base64,{b64}" download="{filename}"'
+
+#   return href
+
+
 class Company:
   def __init__(self, tinker, days=365):
-    self.tinker = tinker.upper()
+    self.tinker = str(tinker).strip().upper()
     self.start_date, self.end_date =  self.period(days)
   
   def period(self, days=365):

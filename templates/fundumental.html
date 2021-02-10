@@ -8,35 +8,37 @@
     <p>
         Fundamental analysis uses the information of a company such as its balance sheet, income statements, etc. to compute its value.
     </p>
-    <div class="row">
+    <div class="form-group col-md-12">
         <form class="form-inline" action="{{ url_for('fundumentals') }}" method="post">
             {{ form.hidden_tag() }}
-            <div class=col-md-3>
-                {{form.tinker.label }}
+            <div class=col-md-2>
+                {{form.tinker.label(class="control-label") }}
             </div>
             <div class='col-md-8'>
-                {{ form.tinker(size=32) }}
+                {{ form.tinker(size=50 ) }}
             </div>
-            <div class='col-md-3'>
-                {{ form.submit() }}
+
+            <div class='col-md-2'>
+                {{ form.submit(class="btn btn-primary btn-block") }}
             </div>
+            
         </form>
             
-
-        </div>
+    </div>
+    <div class=page>
+        {%if tables %}
+            <!-- Download dataframe  -->
+            <!-- target="_blank" rel="noopener noreferrer"  -->
+            <a class="label label-primary" href={{ url_for('downloadFile', filename='fundumental.csv') }} style="margin-right: 5px;">Download Data </a>
+            </form>
+            {% for table in tables %}
+                <!-- {#{columns[loop.index]}#} -->
+                    {{ table|safe }}
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 <br>
 
-<div class=page>
-    {%if tables %}
-    <form method="get" action="./exported/fundumental.csv">
-        <button type="submit">Download!</button>
-     </form>
-        {% for table in tables %}
-            {{columns[loop.index]}}
-                {{ table|safe }}
-        {% endfor %}
-    {% endif %}
-</div>
+
 {% endblock %} 

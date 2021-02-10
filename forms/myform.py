@@ -26,5 +26,5 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
     #         raise ValidationError('Please use a different email address.')
 
 class FundumentalForm(FlaskForm):
-    tinker = StringField('tinkers', validators=[DataRequired()])
-    submit = SubmitField('submit')
+    tinker = StringField('Tinkers', validators=[DataRequired()])
+    submit = SubmitField('Submit')

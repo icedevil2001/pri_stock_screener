@@ -1,7 +1,7 @@
 # from typing_extensions import ParamSpec
 # from screener.util import period
 import talib
-from util import StockData, Company
+from .util import StockData 
 from pandas_datareader import data as pdr
 from yahoo_fin import stock_info as si
 import numpy as np
